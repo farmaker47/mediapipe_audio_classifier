@@ -194,7 +194,7 @@ class AudioClassifierHelper(
         const val DISPLAY_THRESHOLD = 0.3f
         const val DEFAULT_NUM_OF_RESULTS = 2
         const val DEFAULT_OVERLAP = 2
-        const val YAMNET_MODEL = "speech_commands_model.tflite"
+        const val YAMNET_MODEL = "yamnet.tflite"
 
         private const val SAMPLING_RATE_IN_HZ = 16000
         private const val BUFFER_SIZE_FACTOR: Int = 2
