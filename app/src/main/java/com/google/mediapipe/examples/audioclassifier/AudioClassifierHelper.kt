@@ -58,7 +58,7 @@ class AudioClassifierHelper(
         // Set general detection options, e.g. number of used threads
         val baseOptionsBuilder = BaseOptions.builder()
 
-        baseOptionsBuilder.setModelAssetPath(YAMNET_MODEL)
+        baseOptionsBuilder.setModelAssetPath(GENERAL_MODEL)
 
         try {
             // Configures a set of parameters for the classifier and what results will be returned.
@@ -121,10 +121,16 @@ class AudioClassifierHelper(
         // length using the input buffer size and tensor format sample rate.
         // For example, YAMNET expects 0.975 second length recordings.
         // This needs to be in milliseconds to avoid the required Long value dropping decimals.
+
         val lengthInMilliSeconds =
             ((REQUIRE_INPUT_BUFFER_SIZE * 1.0f) / SAMPLING_RATE_IN_HZ) * 1000
+        Log.v("classifier_length", lengthInMilliSeconds.toString())
+        Log.v("classifier_buffer_size", REQUIRE_INPUT_BUFFER_SIZE.toString())
+        Log.v("classifier_sample_rate", SAMPLING_RATE_IN_HZ.toString())
 
-        val interval = (lengthInMilliSeconds * (1 - (overlap * 0.25))).toLong()
+        val interval = (lengthInMilliSeconds * (1 - overlap)).toLong()
+        Log.v("classifier_interval", interval.toString())
+        Log.v("classifier_overlap", overlap.toString())
 
         executor?.scheduleAtFixedRate(
             classifyRunnable,
@@ -195,10 +201,11 @@ class AudioClassifierHelper(
         const val DEFAULT_NUM_OF_RESULTS = 2
         const val DEFAULT_OVERLAP = 2
         const val YAMNET_MODEL = "yamnet.tflite"
+        const val GENERAL_MODEL = "speech.tflite"
 
-        private const val SAMPLING_RATE_IN_HZ = 16000
+        private const val SAMPLING_RATE_IN_HZ = 44100
         private const val BUFFER_SIZE_FACTOR: Int = 2
-        const val EXPECTED_INPUT_LENGTH = 0.975F
+        const val EXPECTED_INPUT_LENGTH = 0.998458F
         private const val REQUIRE_INPUT_BUFFER_SIZE =
             SAMPLING_RATE_IN_HZ * EXPECTED_INPUT_LENGTH
 
